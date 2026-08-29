@@ -4,6 +4,7 @@ using AuraVault.App.Commands;
 using AuraVault.App.Localization;
 using AuraVault.App.Services;
 using AuraVault.App.Settings;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -32,12 +33,27 @@ public partial class ShellViewModel : ObservableObject
         _theme = theme;
         _commands = commands;
 
-        _vault.Opened += (_, _) => ShowVault();
-        _vault.Closed += (_, _) => ShowUnlock();
-        _vault.Saved += (_, _) => StatusText = $"Saved {Path.GetFileName(_vault.Path)}  ·  {DateTime.Now:HH:mm}";
+        // VaultService events can fire from a background thread (open/create runs off the UI thread);
+        // marshal anything that touches bound state or Avalonia resources back onto the UI thread.
+        _vault.Opened += (_, _) => OnUi(ShowVault);
+        _vault.Closed += (_, _) => OnUi(ShowUnlock);
+        _vault.Saved += (_, _) => OnUi(() =>
+            StatusText = $"Saved {Path.GetFileName(_vault.Path)}  ·  {DateTime.Now:HH:mm}");
 
         RegisterCommands();
         Palette = new CommandPaletteViewModel(_commands, () => IsPaletteOpen = false);
+    }
+
+    private static void OnUi(Action action)
+    {
+        if (Dispatcher.UIThread.CheckAccess())
+        {
+            action();
+        }
+        else
+        {
+            Dispatcher.UIThread.Post(action);
+        }
     }
 
     public CommandRegistry Commands => _commands;
@@ -72,14 +88,8 @@ public partial class ShellViewModel : ObservableObject
     public void Start()
     {
         string? last = _settings.Current.General.LastVaultPath;
-        if (!string.IsNullOrEmpty(last) && File.Exists(last))
-        {
-            CurrentPage = new UnlockViewModel(_vault, _settings, last, startInCreateMode: false);
-        }
-        else
-        {
-            CurrentPage = new UnlockViewModel(_vault, _settings, last, startInCreateMode: true);
-        }
+        bool exists = !string.IsNullOrEmpty(last) && File.Exists(last);
+        CurrentPage = new UnlockViewModel(_vault, _settings, last, startInCreateMode: !exists);
     }
 
     private void ShowVault()

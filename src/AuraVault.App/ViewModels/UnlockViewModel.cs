@@ -106,8 +106,9 @@ public partial class UnlockViewModel : ObservableObject
         {
             Error = Loc.T("unlock.wrong");
         }
-        catch (Exception ex) when (ex is IOException or KdbxFormatException)
+        catch (Exception ex)
         {
+            Serilog.Log.Error(ex, "Vault {Mode} failed for {Path}", CreateMode ? "create" : "open", VaultPath);
             Error = ex.Message;
         }
         finally
