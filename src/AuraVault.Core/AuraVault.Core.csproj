@@ -13,6 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Generator\Resources\wordlist-eff-large.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <InternalsVisibleTo Include="AuraVault.Core.Tests" />
     <InternalsVisibleTo Include="AuraVault.Integration.Tests" />
   </ItemGroup>
