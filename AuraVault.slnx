@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/AuraVault.Cli/AuraVault.Cli.csproj" />
     <Project Path="src/AuraVault.Core/AuraVault.Core.csproj" />
   </Folder>
   <Folder Name="/tests/">
