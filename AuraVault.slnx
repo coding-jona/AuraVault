@@ -1,7 +1,10 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/AuraVault.App/AuraVault.App.csproj" />
     <Project Path="src/AuraVault.Cli/AuraVault.Cli.csproj" />
     <Project Path="src/AuraVault.Core/AuraVault.Core.csproj" />
+    <Project Path="src/AuraVault.Platform.Abstractions/AuraVault.Platform.Abstractions.csproj" />
+    <Project Path="src/AuraVault.Platform.Windows/AuraVault.Platform.Windows.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/AuraVault.Core.Tests/AuraVault.Core.Tests.csproj" />

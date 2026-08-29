@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AuraVault.App.ViewModels"
+        xmlns:views="using:AuraVault.App.Views"
+        xmlns:aura="using:AuraVault.App.Aura"
+        x:Class="AuraVault.App.Views.MainWindow"
+        x:DataType="vm:ShellViewModel"
+        Width="1180" Height="760"
+        MinWidth="880" MinHeight="560"
+        Title="AuraVault"
+        WindowStartupLocation="CenterScreen">
+
+  <Window.DataTemplates>
+    <DataTemplate DataType="vm:UnlockViewModel">
+      <views:UnlockView />
+    </DataTemplate>
+    <DataTemplate DataType="vm:VaultViewModel">
+      <views:VaultView />
+    </DataTemplate>
+  </Window.DataTemplates>
+
+  <Window.KeyBindings>
+    <KeyBinding Gesture="Ctrl+K" Command="{Binding TogglePaletteCommand}" />
+    <KeyBinding Gesture="Ctrl+S" Command="{Binding RunCommandCommand}" CommandParameter="vault.save" />
+    <KeyBinding Gesture="Ctrl+L" Command="{Binding RunCommandCommand}" CommandParameter="vault.lock" />
+    <KeyBinding Gesture="Ctrl+OemComma" Command="{Binding RunCommandCommand}" CommandParameter="app.prefs" />
+    <KeyBinding Gesture="Ctrl+G" Command="{Binding RunCommandCommand}" CommandParameter="app.generate" />
+  </Window.KeyBindings>
+
+  <Panel>
+    <!-- Aura background -->
+    <aura:AuraLayer x:Name="Aura"
+                    Intensity="{Binding Settings.Current.Aura.Intensity}"
+                    Animated="{Binding Settings.Current.Aura.EnableAnimatedBackground}"
+                    Accent="{Binding Theme.Accent}"
+                    Accent2="{Binding Theme.Accent2}"
+                    BaseColor="{Binding Theme.BaseBackground}" />
+
+    <DockPanel LastChildFill="True">
+
+      <!-- Menu bar -->
+      <Menu DockPanel.Dock="Top" Margin="4" Background="Transparent">
+        <MenuItem Header="{Binding MenuFile}">
+          <MenuItem Header="{Binding CmdSave}" Command="{Binding RunCommandCommand}" CommandParameter="vault.save" InputGesture="Ctrl+S" />
+          <MenuItem Header="{Binding CmdLock}" Command="{Binding RunCommandCommand}" CommandParameter="vault.lock" InputGesture="Ctrl+L" />
+          <Separator />
+          <MenuItem Header="{Binding CmdQuit}" Command="{Binding RunCommandCommand}" CommandParameter="app.quit" />
+        </MenuItem>
+        <MenuItem Header="{Binding MenuView}">
+          <MenuItem Header="{Binding CmdPalette}" Command="{Binding TogglePaletteCommand}" InputGesture="Ctrl+K" />
+        </MenuItem>
+        <MenuItem Header="{Binding MenuTools}">
+          <MenuItem Header="{Binding CmdGenerate}" Command="{Binding RunCommandCommand}" CommandParameter="app.generate" InputGesture="Ctrl+G" />
+          <MenuItem Header="{Binding CmdPrefs}" Command="{Binding RunCommandCommand}" CommandParameter="app.prefs" InputGesture="Ctrl+," />
+        </MenuItem>
+        <MenuItem Header="{Binding MenuHelp}">
+          <MenuItem Header="About AuraVault" IsEnabled="False" />
+        </MenuItem>
+      </Menu>
+
+      <!-- Status bar -->
+      <Border DockPanel.Dock="Bottom" Height="26" Background="{DynamicResource Aura.SurfaceBrush}"
+              BorderBrush="{DynamicResource Aura.StrokeBrush}" BorderThickness="0,1,0,0">
+        <TextBlock Classes="dim" VerticalAlignment="Center" Margin="12,0" FontSize="12"
+                   Text="{Binding StatusText}" />
+      </Border>
+
+      <!-- Page host -->
+      <ContentControl Margin="8" Content="{Binding CurrentPage}" />
+    </DockPanel>
+
+    <!-- Command palette overlay -->
+    <Border IsVisible="{Binding IsPaletteOpen}" Background="#66000000">
+      <Border Classes="card" Width="560" MaxHeight="420" VerticalAlignment="Top" Margin="0,90,0,0"
+              HorizontalAlignment="Center">
+        <views:CommandPaletteView />
+      </Border>
+    </Border>
+  </Panel>
+</Window>

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <RootNamespace>AuraVault.App</RootNamespace>
+    <AssemblyName>AuraVault</AssemblyName>
+    <Description>AuraVault desktop application (Avalonia).</Description>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <AnalysisMode>Default</AnalysisMode>
+    <NoWarn>$(NoWarn);CA1416;CA1822;CA1305;CA1307;CA1310;CA2007;CA1848;CA1031;CA1000;CA1861;CA1002;CA5394;CA1054;CA1056;CA1819</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+    <PackageReference Include="Avalonia.Fonts.Inter" />
+    <PackageReference Include="Avalonia.Skia" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.File" />
+    <PackageReference Include="Serilog.Sinks.Debug" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuraVault.Core\AuraVault.Core.csproj" />
+    <ProjectReference Include="..\AuraVault.Platform.Abstractions\AuraVault.Platform.Abstractions.csproj" />
+    <ProjectReference Include="..\AuraVault.Platform.Windows\AuraVault.Platform.Windows.csproj" />
+  </ItemGroup>
+
+</Project>

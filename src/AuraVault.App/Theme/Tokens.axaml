@@ -1,0 +1,54 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Design tokens. Palettes are swapped by ThemeService at runtime; these are the dark defaults. -->
+  <ResourceDictionary.ThemeDictionaries>
+
+    <ResourceDictionary x:Key="Dark">
+      <Color x:Key="Aura.Bg0">#0B0B10</Color>
+      <Color x:Key="Aura.Bg1">#12121A</Color>
+      <Color x:Key="Aura.Surface">#171722</Color>
+      <Color x:Key="Aura.SurfaceAlt">#1E1E2B</Color>
+      <Color x:Key="Aura.Stroke">#2A2A3A</Color>
+      <Color x:Key="Aura.Text">#ECECF2</Color>
+      <Color x:Key="Aura.TextDim">#9A9AB0</Color>
+      <Color x:Key="Aura.Accent">#7C5CFF</Color>
+      <Color x:Key="Aura.Accent2">#33D6C4</Color>
+      <Color x:Key="Aura.Danger">#FF5C7A</Color>
+      <Color x:Key="Aura.GlassTint">#33171722</Color>
+    </ResourceDictionary>
+
+    <ResourceDictionary x:Key="Light">
+      <Color x:Key="Aura.Bg0">#F4F4F8</Color>
+      <Color x:Key="Aura.Bg1">#ECECF2</Color>
+      <Color x:Key="Aura.Surface">#FFFFFF</Color>
+      <Color x:Key="Aura.SurfaceAlt">#F2F2F7</Color>
+      <Color x:Key="Aura.Stroke">#D9D9E3</Color>
+      <Color x:Key="Aura.Text">#1A1A22</Color>
+      <Color x:Key="Aura.TextDim">#5C5C6E</Color>
+      <Color x:Key="Aura.Accent">#6A45FF</Color>
+      <Color x:Key="Aura.Accent2">#12A594</Color>
+      <Color x:Key="Aura.Danger">#D63A57</Color>
+      <Color x:Key="Aura.GlassTint">#B3FFFFFF</Color>
+    </ResourceDictionary>
+
+  </ResourceDictionary.ThemeDictionaries>
+
+  <!-- Brushes derived from the tokens above. -->
+  <SolidColorBrush x:Key="Aura.BgBrush" Color="{DynamicResource Aura.Bg0}" />
+  <SolidColorBrush x:Key="Aura.SurfaceBrush" Color="{DynamicResource Aura.Surface}" />
+  <SolidColorBrush x:Key="Aura.SurfaceAltBrush" Color="{DynamicResource Aura.SurfaceAlt}" />
+  <SolidColorBrush x:Key="Aura.StrokeBrush" Color="{DynamicResource Aura.Stroke}" />
+  <SolidColorBrush x:Key="Aura.TextBrush" Color="{DynamicResource Aura.Text}" />
+  <SolidColorBrush x:Key="Aura.TextDimBrush" Color="{DynamicResource Aura.TextDim}" />
+  <SolidColorBrush x:Key="Aura.AccentBrush" Color="{DynamicResource Aura.Accent}" />
+  <SolidColorBrush x:Key="Aura.Accent2Brush" Color="{DynamicResource Aura.Accent2}" />
+  <SolidColorBrush x:Key="Aura.DangerBrush" Color="{DynamicResource Aura.Danger}" />
+  <SolidColorBrush x:Key="Aura.GlassBrush" Color="{DynamicResource Aura.GlassTint}" />
+
+  <x:Double x:Key="Aura.Radius">10</x:Double>
+  <CornerRadius x:Key="Aura.CornerRadius">10</CornerRadius>
+  <CornerRadius x:Key="Aura.CornerRadiusSmall">6</CornerRadius>
+  <Thickness x:Key="Aura.PagePadding">20</Thickness>
+
+</ResourceDictionary>

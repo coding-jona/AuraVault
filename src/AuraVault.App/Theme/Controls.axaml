@@ -1,0 +1,63 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource Aura.BgBrush}" />
+    <Setter Property="TransparencyLevelHint" Value="Mica,AcrylicBlur,Blur" />
+  </Style>
+
+  <Style Selector="TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource Aura.TextBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.dim">
+    <Setter Property="Foreground" Value="{DynamicResource Aura.TextDimBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.h1">
+    <Setter Property="FontSize" Value="26" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <Style Selector="TextBlock.h2">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <Style Selector="Border.card">
+    <Setter Property="Background" Value="{DynamicResource Aura.SurfaceBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Aura.StrokeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Aura.CornerRadius}" />
+    <Setter Property="Padding" Value="16" />
+    <Setter Property="BoxShadow" Value="0 8 30 0 #40000000" />
+  </Style>
+
+  <Style Selector="Border.glass">
+    <Setter Property="Background" Value="{DynamicResource Aura.GlassBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource Aura.StrokeBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Aura.CornerRadius}" />
+  </Style>
+
+  <Style Selector="Button.accent">
+    <Setter Property="Background" Value="{DynamicResource Aura.AccentBrush}" />
+    <Setter Property="Foreground" Value="#FFFFFF" />
+    <Setter Property="Padding" Value="16 9" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Aura.CornerRadiusSmall}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource Aura.AccentBrush}" />
+    <Setter Property="Opacity" Value="0.88" />
+  </Style>
+
+  <Style Selector="Button.ghost">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource Aura.TextBrush}" />
+    <Setter Property="Padding" Value="12 8" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Aura.CornerRadiusSmall}" />
+  </Style>
+
+</Styles>

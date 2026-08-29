@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AuraVault.App.ViewModels"
+             xmlns:cmd="using:AuraVault.App.Commands"
+             x:Class="AuraVault.App.Views.CommandPaletteView"
+             x:DataType="vm:ShellViewModel">
+
+  <StackPanel Spacing="10" DataContext="{Binding Palette}" x:DataType="vm:CommandPaletteViewModel">
+    <TextBox x:Name="Query" PlaceholderText="Type a command…" Text="{Binding Query}" FontSize="15">
+      <TextBox.KeyBindings>
+        <KeyBinding Gesture="Enter" Command="{Binding RunCommand}" />
+      </TextBox.KeyBindings>
+    </TextBox>
+
+    <ListBox ItemsSource="{Binding Results}" SelectedItem="{Binding Selected}"
+             MaxHeight="320" Background="Transparent" BorderThickness="0">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="cmd:AppCommand">
+          <Grid ColumnDefinitions="*,Auto" Margin="4">
+            <StackPanel>
+              <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+              <TextBlock Classes="dim" FontSize="11" Text="{Binding Category}" />
+            </StackPanel>
+            <TextBlock Grid.Column="1" Classes="dim" FontSize="11" VerticalAlignment="Center"
+                       Text="{Binding Gesture}" />
+          </Grid>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </StackPanel>
+</UserControl>
