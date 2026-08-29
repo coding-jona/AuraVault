@@ -40,7 +40,7 @@ public static class ImportPipeline
                 continue;
             }
 
-            var existing = resolver.Match(entry);
+            var existing = resolver.Match(entry, strategy);
             if (existing is not null)
             {
                 row.DuplicateOf = existing;
@@ -75,20 +75,20 @@ public static class ImportPipeline
             switch (row.Outcome)
             {
                 case ImportOutcome.New:
-                {
-                    Group target = ResolveGroup(targetVault, row.TargetGroupPath, now);
-                    target.Entries.Add(row.Proposed);
-                    added++;
-                    break;
-                }
+                    {
+                        Group target = ResolveGroup(targetVault, row.TargetGroupPath, now);
+                        target.Entries.Add(row.Proposed);
+                        added++;
+                        break;
+                    }
 
                 case ImportOutcome.Updated when row.DuplicateOf is { } existing:
-                {
-                    existing.History.Add(existing.Clone(includeHistory: false));
-                    MergeInto(existing, row.Proposed, now);
-                    updated++;
-                    break;
-                }
+                    {
+                        existing.History.Add(existing.Clone(includeHistory: false));
+                        MergeInto(existing, row.Proposed, now);
+                        updated++;
+                        break;
+                    }
 
                 default:
                     skipped++;

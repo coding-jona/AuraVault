@@ -12,10 +12,10 @@
 
 </div>
 
-> **Status: early development (P0 complete).**
-> The cryptographic core and a clean-room **KDBX 4.1 reader/writer** are implemented and tested,
-> and round-trip against KeePassXC / KeePass 2.x. The Avalonia UI, importers, and OS integration
-> are being built sector by sector — see the [roadmap](#roadmap).
+> **Status: early development (P0–P1 complete).**
+> The cryptographic core, a clean-room **KDBX 4.1 reader/writer**, the CSV import pipeline, the
+> password generator and search all work headless, driven by a small [`auravault` CLI](#cli).
+> The Avalonia UI and OS integration are being built sector by sector — see the [roadmap](#roadmap).
 
 ---
 
@@ -81,6 +81,21 @@ dotnet test
 Tests run on the **Microsoft.Testing.Platform** runner (opted in via `global.json`), which the
 .NET 10 SDK requires for xUnit v3.
 
+<a id="cli"></a>
+### CLI quickstart
+
+```bash
+dotnet run --project src/AuraVault.Cli -- create Personal.kdbx
+dotnet run --project src/AuraVault.Cli -- import Personal.kdbx --dir path\to\entschluesselt        # dry run
+dotnet run --project src/AuraVault.Cli -- import Personal.kdbx --dir path\to\entschluesselt --commit
+dotnet run --project src/AuraVault.Cli -- ls Personal.kdbx paypal
+dotnet run --project src/AuraVault.Cli -- gen --passphrase --words 6
+```
+
+`import` is a dry run until `--commit`; it prints New / Duplicate / Updated / Skipped counts per file.
+`ls` hides passwords unless `--show-passwords`. The master password is read from a masked prompt,
+or `--password-env NAME`, or `--password-stdin`.
+
 ### What's verified today
 
 - ChaCha20 against the RFC 8439 §2.3.2 keystream vector
@@ -116,7 +131,8 @@ The full plan — 17 self-contained sectors, phased P0–P5 — lives in
 | Phase | Scope | State |
 |------:|-------|:-----:|
 | **P0** | Crypto core + KDBX 4.1 read/write + vault model + tests | ✅ done |
-| **P1** | CSV/XLSX import pipeline · entry management UI · generator · instant search | ▫ next |
+| **P1** | CSV import pipeline · generator · instant search · backup · `auravault` CLI | ✅ done |
+| **P1.5** | Entry-management UI (needs the Avalonia shell — lands with P2) | ▫ next |
 | **P2** | Aura render system · menu bar + command palette · docking · preferences · DE/EN · onboarding | ▫ |
 | **P3** | Security runtime · TOTP · security dashboard · tray + hotkey + auto-type · Windows Hello · backups | ▫ |
 | **P4** | More importers/exporters · multi-vault · KDBX merge | ▫ |

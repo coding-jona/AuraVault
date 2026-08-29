@@ -88,8 +88,11 @@ public static class DelimitedText
 
     public static TabularTable ParseFile(string path, char? forceDelimiter = null)
     {
-        byte[] bytes = File.ReadAllBytes(path);
-        string text = DecodeWithBomOrUtf8(bytes);
+        // FileShare.ReadWrite so an export still open in Excel doesn't block the import.
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var ms = new MemoryStream();
+        stream.CopyTo(ms);
+        string text = DecodeWithBomOrUtf8(ms.ToArray());
         return Parse(text, forceDelimiter);
     }
 
