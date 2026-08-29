@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <RootNamespace>AuraVault.Platform.Windows</RootNamespace>
+    <AssemblyName>AuraVault.Platform.Windows</AssemblyName>
+    <Description>Windows implementations of the platform services (Win32 / WinRT).</Description>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuraVault.Core\AuraVault.Core.csproj" />
+    <ProjectReference Include="..\AuraVault.Platform.Abstractions\AuraVault.Platform.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

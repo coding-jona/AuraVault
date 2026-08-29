@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AuraVault.App.ViewModels"
+             x:Class="AuraVault.App.Views.VaultView"
+             x:DataType="vm:VaultViewModel">
+
+  <Grid ColumnDefinitions="220,*,360" Margin="0">
+
+    <!-- Groups -->
+    <Border Grid.Column="0" Classes="card" Margin="0,0,8,0" Padding="6">
+      <TreeView ItemsSource="{Binding Groups}" SelectedItem="{Binding SelectedGroup}">
+        <TreeView.ItemTemplate>
+          <TreeDataTemplate ItemsSource="{Binding Children}" x:DataType="vm:GroupNode">
+            <Grid ColumnDefinitions="*,Auto" Margin="2">
+              <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+              <TextBlock Grid.Column="1" Classes="dim" FontSize="11" VerticalAlignment="Center"
+                         Text="{Binding Count}" />
+            </Grid>
+          </TreeDataTemplate>
+        </TreeView.ItemTemplate>
+      </TreeView>
+    </Border>
+
+    <!-- Entry list -->
+    <Border Grid.Column="1" Classes="card" Margin="0,0,8,0" Padding="0">
+      <DockPanel LastChildFill="True">
+        <TextBox DockPanel.Dock="Top" Margin="10" PlaceholderText="Search…  (Ctrl+F)"
+                 Text="{Binding Search}" />
+        <ListBox ItemsSource="{Binding Entries}" SelectedItem="{Binding SelectedEntry}"
+                 Background="Transparent" BorderThickness="0">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:EntryRow">
+              <StackPanel Spacing="2" Margin="4">
+                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                <TextBlock Classes="dim" FontSize="12" Text="{Binding UserName}" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </DockPanel>
+    </Border>
+
+    <!-- Detail -->
+    <Border Grid.Column="2" Classes="card">
+      <ScrollViewer>
+        <StackPanel Spacing="14" IsVisible="{Binding SelectedEntry, Converter={x:Static ObjectConverters.IsNotNull}}">
+          <TextBlock Classes="h1" Text="{Binding SelectedEntry.Title}" TextWrapping="Wrap" />
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="dim h2" Text="Username" />
+            <Grid ColumnDefinitions="*,Auto">
+              <SelectableTextBlock Text="{Binding SelectedEntry.Entry.UserName}" VerticalAlignment="Center" />
+              <Button Grid.Column="1" Classes="ghost" Content="Copy" Command="{Binding CopyUsernameCommand}" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="dim h2" Text="Password" />
+            <Grid ColumnDefinitions="*,Auto,Auto">
+              <TextBlock VerticalAlignment="Center" FontFamily="Consolas"
+                         Text="{Binding SelectedEntry.Entry.Password}"
+                         IsVisible="{Binding PasswordRevealed}" />
+              <TextBlock VerticalAlignment="Center" Text="••••••••••••"
+                         IsVisible="{Binding !PasswordRevealed}" />
+              <Button Grid.Column="1" Classes="ghost" Content="Reveal" Command="{Binding ToggleRevealCommand}" />
+              <Button Grid.Column="2" Classes="ghost" Content="Copy" Command="{Binding CopyPasswordCommand}" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="dim h2" Text="URL" />
+            <SelectableTextBlock Text="{Binding SelectedEntry.Entry.Url}" />
+          </StackPanel>
+
+          <StackPanel Spacing="4"
+                      IsVisible="{Binding SelectedEntry.Entry.Notes, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Classes="dim h2" Text="Notes" />
+            <SelectableTextBlock Text="{Binding SelectedEntry.Entry.Notes}" TextWrapping="Wrap" />
+          </StackPanel>
+
+          <ItemsControl ItemsSource="{Binding SelectedEntry.Entry.Tags}">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Background="{DynamicResource Aura.SurfaceAltBrush}" CornerRadius="6"
+                        Padding="8,3" Margin="0,0,6,6">
+                  <TextBlock FontSize="11" Text="{Binding}" />
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+  </Grid>
+</UserControl>

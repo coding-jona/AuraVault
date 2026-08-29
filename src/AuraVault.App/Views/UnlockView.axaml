@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:AuraVault.App.ViewModels"
+             x:Class="AuraVault.App.Views.UnlockView"
+             x:DataType="vm:UnlockViewModel">
+
+  <Border Classes="card glass" Width="420" VerticalAlignment="Center" HorizontalAlignment="Center"
+          Padding="28" CornerRadius="16">
+    <StackPanel Spacing="14">
+
+      <StackPanel Spacing="4">
+        <TextBlock Classes="h1" Text="{Binding Title}" />
+        <TextBlock Classes="dim" FontSize="12" Text="{Binding VaultPath}" TextTrimming="CharacterEllipsis" />
+      </StackPanel>
+
+      <StackPanel Spacing="8" IsVisible="{Binding CreateMode}">
+        <TextBox PlaceholderText="Vault name" Text="{Binding VaultName}" />
+      </StackPanel>
+
+      <TextBox x:Name="PasswordBox" PasswordChar="●" PlaceholderText="Master password"
+               Text="{Binding Password}">
+        <TextBox.KeyBindings>
+          <KeyBinding Gesture="Enter" Command="{Binding SubmitCommand}" />
+        </TextBox.KeyBindings>
+      </TextBox>
+
+      <TextBox PasswordChar="●" PlaceholderText="Repeat password" Text="{Binding ConfirmPassword}"
+               IsVisible="{Binding CreateMode}" />
+
+      <TextBlock Classes="dim" Foreground="{DynamicResource Aura.DangerBrush}"
+                 Text="{Binding Error}" IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+      <Button Classes="accent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+              Command="{Binding SubmitCommand}" IsEnabled="{Binding !Busy}"
+              Content="{Binding SubmitLabel}" />
+
+      <Button Classes="ghost" HorizontalAlignment="Center" Command="{Binding ToggleModeCommand}"
+              Content="{Binding ToggleLabel}" />
+    </StackPanel>
+  </Border>
+</UserControl>

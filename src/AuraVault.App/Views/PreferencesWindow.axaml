@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AuraVault.App.ViewModels"
+        x:Class="AuraVault.App.Views.PreferencesWindow"
+        x:DataType="vm:PreferencesViewModel"
+        Width="520" Height="520" Title="Preferences"
+        WindowStartupLocation="CenterOwner">
+
+  <ScrollViewer Padding="20">
+    <StackPanel Spacing="18">
+
+      <TextBlock Classes="h1" Text="Preferences" />
+
+      <StackPanel Spacing="8">
+        <TextBlock Classes="h2" Text="Appearance" />
+        <TextBlock Classes="dim" Text="Theme" />
+        <ComboBox ItemsSource="{Binding Themes}" SelectedIndex="{Binding Theme_}" HorizontalAlignment="Stretch" />
+        <TextBlock Classes="dim" Text="Accent colour (#RRGGBB)" />
+        <TextBox Text="{Binding Accent}" />
+      </StackPanel>
+
+      <StackPanel Spacing="10">
+        <TextBlock Classes="h2" Text="Aura" />
+
+        <DockPanel>
+          <TextBlock Text="Intensity" DockPanel.Dock="Left" Width="150" VerticalAlignment="Center" />
+          <Slider Minimum="0" Maximum="1" Value="{Binding Intensity}" />
+        </DockPanel>
+
+        <DockPanel>
+          <TextBlock Text="Animation speed" DockPanel.Dock="Left" Width="150" VerticalAlignment="Center" />
+          <Slider Minimum="0.25" Maximum="2" Value="{Binding Speed}" />
+        </DockPanel>
+
+        <CheckBox Content="Animated background" IsChecked="{Binding Animated}" />
+        <CheckBox Content="Glass surfaces" IsChecked="{Binding Glass}" />
+        <CheckBox Content="Reduced motion" IsChecked="{Binding Reduced}" />
+      </StackPanel>
+
+      <TextBlock Classes="dim" FontSize="11"
+                 Text="Changes apply immediately and are saved to %APPDATA%\AuraVault\settings.json." />
+    </StackPanel>
+  </ScrollViewer>
+</Window>

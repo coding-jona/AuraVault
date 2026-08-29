@@ -1,0 +1,43 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AuraVault.App.ViewModels"
+        x:Class="AuraVault.App.Views.GeneratorWindow"
+        x:DataType="vm:GeneratorViewModel"
+        Width="460" Height="360" Title="Password generator"
+        WindowStartupLocation="CenterOwner">
+
+  <StackPanel Margin="20" Spacing="14">
+    <TextBlock Classes="h1" Text="Generator" />
+
+    <Border Classes="card">
+      <StackPanel Spacing="6">
+        <SelectableTextBlock Text="{Binding Result}" FontFamily="Consolas" FontSize="16" TextWrapping="Wrap" />
+        <TextBlock Classes="dim" FontSize="12" Text="{Binding Strength}" />
+      </StackPanel>
+    </Border>
+
+    <CheckBox Content="Passphrase (diceware)" IsChecked="{Binding PassphraseMode}" />
+
+    <StackPanel Spacing="6" IsVisible="{Binding !PassphraseMode}">
+      <DockPanel>
+        <TextBlock Text="Length" DockPanel.Dock="Left" Width="90" VerticalAlignment="Center" />
+        <Slider Minimum="8" Maximum="64" Value="{Binding Length}" />
+      </DockPanel>
+      <CheckBox Content="Symbols" IsChecked="{Binding Symbols}" />
+      <CheckBox Content="Digits" IsChecked="{Binding Digits}" />
+      <CheckBox Content="Exclude look-alike characters" IsChecked="{Binding ExcludeLookAlike}" />
+    </StackPanel>
+
+    <StackPanel Spacing="6" IsVisible="{Binding PassphraseMode}">
+      <DockPanel>
+        <TextBlock Text="Words" DockPanel.Dock="Left" Width="90" VerticalAlignment="Center" />
+        <Slider Minimum="3" Maximum="10" Value="{Binding Words}" />
+      </DockPanel>
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+      <Button Classes="ghost" Content="Regenerate" Command="{Binding RegenerateCommand}" />
+      <Button Classes="accent" Content="Copy" Command="{Binding CopyCommand}" />
+    </StackPanel>
+  </StackPanel>
+</Window>
