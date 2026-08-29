@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Resources;
 
 namespace AuraVault.Core.Generator;
 
