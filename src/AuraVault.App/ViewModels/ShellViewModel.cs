@@ -83,6 +83,8 @@ public partial class ShellViewModel : ObservableObject
 
     public string CmdGenerate => Loc.T("cmd.generate");
 
+    public string CmdImport => Loc.T("cmd.import");
+
     public string CmdQuit => Loc.T("cmd.quit");
 
     public void Start()
@@ -145,6 +147,9 @@ public partial class ShellViewModel : ObservableObject
         _commands.Add(new AppCommand("app.generate", Loc.T("cmd.generate"), Loc.T("menu.tools"),
             execute: OpenGenerator, gesture: "Ctrl+G", keywords: "password diceware passphrase"));
 
+        _commands.Add(new AppCommand("app.import", Loc.T("cmd.import"), Loc.T("menu.file"),
+            execute: OpenImport, canExecute: () => _vault.IsOpen, gesture: "Ctrl+I", keywords: "csv iphone migrate"));
+
         _commands.Add(new AppCommand("app.quit", Loc.T("cmd.quit"), Loc.T("menu.file"),
             execute: () => Environment.Exit(0), gesture: "Alt+F4", keywords: "exit"));
     }
@@ -159,5 +164,24 @@ public partial class ShellViewModel : ObservableObject
     {
         var window = new Views.GeneratorWindow { DataContext = new GeneratorViewModel() };
         window.Show();
+    }
+
+    private void OpenImport()
+    {
+        if (!_vault.IsOpen)
+        {
+            return;
+        }
+
+        var window = new Views.ImportWizardWindow { DataContext = new ImportWizardViewModel(_vault) };
+        if (Avalonia.Application.Current?.ApplicationLifetime is
+            Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
+        {
+            window.ShowDialog(owner);
+        }
+        else
+        {
+            window.Show();
+        }
     }
 }

@@ -1,0 +1,80 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AuraVault.App.ViewModels"
+        x:Class="AuraVault.App.Views.EntryEditorWindow"
+        x:DataType="vm:EntryEditorViewModel"
+        Width="520" Height="620" Title="Entry"
+        WindowStartupLocation="CenterOwner">
+
+  <DockPanel Margin="20" LastChildFill="True">
+
+    <TextBlock DockPanel.Dock="Top" Classes="h1" Text="{Binding HeaderText}" Margin="0,0,0,14" />
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right"
+                Spacing="10" Margin="0,14,0,0">
+      <Button x:Name="CancelButton" Classes="ghost" Content="Cancel" />
+      <Button Classes="accent" Content="Save" Command="{Binding SaveCommand}" Click="OnSaveClicked" />
+    </StackPanel>
+
+    <ScrollViewer>
+      <StackPanel Spacing="12">
+
+        <StackPanel Spacing="4">
+          <TextBlock Classes="dim" Text="Title" />
+          <TextBox Text="{Binding Title}" />
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Classes="dim" Text="Username" />
+          <TextBox Text="{Binding UserName}" />
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Classes="dim" Text="Password" />
+          <Grid ColumnDefinitions="*,Auto,Auto">
+            <TextBox Text="{Binding Password}" PasswordChar="{Binding PasswordCharValue}" />
+            <Button Grid.Column="1" Classes="ghost" Content="👁" Command="{Binding ToggleRevealCommand}" />
+            <Button Grid.Column="2" Classes="ghost" Content="⟳" Command="{Binding GeneratePasswordCommand}" />
+          </Grid>
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Classes="dim" Text="URL" />
+          <TextBox Text="{Binding Url}" />
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Classes="dim" Text="Tags (comma separated)" />
+          <TextBox Text="{Binding Tags}" />
+        </StackPanel>
+
+        <StackPanel Spacing="4">
+          <TextBlock Classes="dim" Text="Notes" />
+          <TextBox Text="{Binding Notes}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80" />
+        </StackPanel>
+
+        <StackPanel Spacing="6">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Classes="dim" Text="Custom fields" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Classes="ghost" Content="+ Add" Command="{Binding AddCustomFieldCommand}" />
+          </Grid>
+          <ItemsControl ItemsSource="{Binding CustomFields}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="vm:CustomFieldRow">
+                <Grid ColumnDefinitions="150,*,Auto,Auto" Margin="0,3">
+                  <TextBox Text="{Binding Key}" />
+                  <TextBox Grid.Column="1" Text="{Binding Value}" Margin="6,0" />
+                  <CheckBox Grid.Column="2" Content="🔒" IsChecked="{Binding ProtectedField}" VerticalAlignment="Center" />
+                  <Button Grid.Column="3" Classes="ghost" Content="✕"
+                          Command="{Binding $parent[ItemsControl].((vm:EntryEditorViewModel)DataContext).RemoveCustomFieldCommand}"
+                          CommandParameter="{Binding}" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

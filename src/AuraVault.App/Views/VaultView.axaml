@@ -4,6 +4,23 @@
              x:Class="AuraVault.App.Views.VaultView"
              x:DataType="vm:VaultViewModel">
 
+  <UserControl.KeyBindings>
+    <KeyBinding Gesture="Ctrl+N" Command="{Binding NewEntryCommand}" />
+    <KeyBinding Gesture="Ctrl+E" Command="{Binding EditEntryCommand}" />
+    <KeyBinding Gesture="Delete" Command="{Binding DeleteEntryCommand}" />
+  </UserControl.KeyBindings>
+
+  <DockPanel LastChildFill="True">
+
+    <!-- Toolbar -->
+    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="8" Margin="2,0,2,8">
+      <Button Classes="accent" Content="＋ Entry" Command="{Binding NewEntryCommand}" />
+      <Button Classes="ghost" Content="✎ Edit" Command="{Binding EditEntryCommand}" />
+      <Button Classes="ghost" Content="🗑 Delete" Command="{Binding DeleteEntryCommand}" />
+      <Rectangle Width="1" Fill="{DynamicResource Aura.StrokeBrush}" Margin="4,4" />
+      <Button Classes="ghost" Content="📁 Group" Command="{Binding NewGroupCommand}" />
+    </StackPanel>
+
   <Grid ColumnDefinitions="220,*,360" Margin="0">
 
     <!-- Groups -->
@@ -27,7 +44,8 @@
         <TextBox DockPanel.Dock="Top" Margin="10" PlaceholderText="Search…  (Ctrl+F)"
                  Text="{Binding Search}" />
         <ListBox ItemsSource="{Binding Entries}" SelectedItem="{Binding SelectedEntry}"
-                 Background="Transparent" BorderThickness="0">
+                 Background="Transparent" BorderThickness="0"
+                 DoubleTapped="OnEntryDoubleTapped">
           <ListBox.ItemTemplate>
             <DataTemplate x:DataType="vm:EntryRow">
               <StackPanel Spacing="2" Margin="4">
@@ -95,4 +113,5 @@
       </ScrollViewer>
     </Border>
   </Grid>
+  </DockPanel>
 </UserControl>

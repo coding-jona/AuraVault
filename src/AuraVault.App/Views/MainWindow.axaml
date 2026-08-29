@@ -25,6 +25,7 @@
     <KeyBinding Gesture="Ctrl+L" Command="{Binding RunCommandCommand}" CommandParameter="vault.lock" />
     <KeyBinding Gesture="Ctrl+OemComma" Command="{Binding RunCommandCommand}" CommandParameter="app.prefs" />
     <KeyBinding Gesture="Ctrl+G" Command="{Binding RunCommandCommand}" CommandParameter="app.generate" />
+    <KeyBinding Gesture="Ctrl+I" Command="{Binding RunCommandCommand}" CommandParameter="app.import" />
   </Window.KeyBindings>
 
   <Panel>
@@ -42,6 +43,7 @@
       <Menu DockPanel.Dock="Top" Margin="4" Background="Transparent">
         <MenuItem Header="{Binding MenuFile}">
           <MenuItem Header="{Binding CmdSave}" Command="{Binding RunCommandCommand}" CommandParameter="vault.save" InputGesture="Ctrl+S" />
+          <MenuItem Header="{Binding CmdImport}" Command="{Binding RunCommandCommand}" CommandParameter="app.import" InputGesture="Ctrl+I" />
           <MenuItem Header="{Binding CmdLock}" Command="{Binding RunCommandCommand}" CommandParameter="vault.lock" InputGesture="Ctrl+L" />
           <Separator />
           <MenuItem Header="{Binding CmdQuit}" Command="{Binding RunCommandCommand}" CommandParameter="app.quit" />

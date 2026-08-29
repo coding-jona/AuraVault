@@ -18,6 +18,8 @@ public sealed class VaultService
 
     public bool IsOpen => Database is not null;
 
+    public bool IsDirty { get; private set; }
+
     public SearchIndex Index { get; } = new();
 
     public event EventHandler? Opened;
@@ -25,6 +27,41 @@ public sealed class VaultService
     public event EventHandler? Closed;
 
     public event EventHandler? Saved;
+
+    public event EventHandler? DirtyChanged;
+
+    public event EventHandler? Changed;
+
+    /// <summary>The vault's Recycle Bin group, resolving/creating it if needed.</summary>
+    public Group RecycleBin
+    {
+        get
+        {
+            var vault = Database!.Vault;
+            var bin = vault.FindGroup(vault.Meta.RecycleBinUuid);
+            if (bin is null)
+            {
+                bin = new Group { Name = "Recycle Bin", IconId = 43, Times = EntryTimes.CreatedNow(DateTimeOffset.UtcNow) };
+                vault.Root.Groups.Add(bin);
+                vault.Meta.RecycleBinUuid = bin.Uuid;
+                vault.Meta.RecycleBinEnabled = true;
+            }
+
+            return bin;
+        }
+    }
+
+    /// <summary>Marks the model changed since the last save and refreshes the search index.</summary>
+    public void MarkDirty()
+    {
+        ReindexSearch();
+        Changed?.Invoke(this, EventArgs.Empty);
+        if (!IsDirty)
+        {
+            IsDirty = true;
+            DirtyChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
 
     public void Create(string path, string name, CompositeKey key)
     {
@@ -47,6 +84,12 @@ public sealed class VaultService
         }
 
         VaultFile.Save(Path, Database, _key);
+        if (IsDirty)
+        {
+            IsDirty = false;
+            DirtyChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         Saved?.Invoke(this, EventArgs.Empty);
     }
 
@@ -57,6 +100,7 @@ public sealed class VaultService
         _key = null;
         Database = null;
         Path = null;
+        IsDirty = false;
         Index.Rebuild(Vault.CreateEmpty("empty", DateTimeOffset.UtcNow));
         GC.Collect();
         Closed?.Invoke(this, EventArgs.Empty);
