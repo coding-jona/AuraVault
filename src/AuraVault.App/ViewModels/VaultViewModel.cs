@@ -29,7 +29,14 @@ public partial class VaultViewModel : ObservableObject
         Groups = new ObservableCollection<GroupNode>(BuildTree());
         SelectedGroup = Groups.FirstOrDefault();
         RefreshEntries();
+
+        _vault.Changed += (_, _) => Avalonia.Threading.Dispatcher.UIThread.Post(Refresh);
+        _vault.DirtyChanged += (_, _) => Avalonia.Threading.Dispatcher.UIThread.Post(NotifyDirtyChanged);
     }
+
+    public bool IsDirty => _vault.IsDirty;
+
+    public void NotifyDirtyChanged() => OnPropertyChanged(nameof(IsDirty));
 
     public ObservableCollection<GroupNode> Groups { get; }
 
@@ -96,6 +103,93 @@ public partial class VaultViewModel : ObservableObject
         {
             await Services.ClipboardHelper.SetTextAsync(row.Entry.UserName);
         }
+    }
+
+    [RelayCommand]
+    private async System.Threading.Tasks.Task NewEntry()
+    {
+        var group = SelectedGroup?.Group ?? _vault.Database!.Vault.Root;
+        if (await EditInDialog(new EntryEditorViewModel(_vault, group, null)))
+        {
+            Refresh();
+        }
+    }
+
+    [RelayCommand]
+    private async System.Threading.Tasks.Task EditEntry()
+    {
+        if (SelectedEntry?.Entry is not { } entry)
+        {
+            return;
+        }
+
+        var group = OwningGroup(entry) ?? _vault.Database!.Vault.Root;
+        if (await EditInDialog(new EntryEditorViewModel(_vault, group, entry)))
+        {
+            Refresh();
+        }
+    }
+
+    [RelayCommand]
+    private void DeleteEntry()
+    {
+        if (SelectedEntry?.Entry is not { } entry || OwningGroup(entry) is not { } group)
+        {
+            return;
+        }
+
+        group.Entries.Remove(entry);
+        var bin = _vault.RecycleBin;
+        if (!ReferenceEquals(group, bin))
+        {
+            entry.Times.LocationChanged = System.DateTimeOffset.UtcNow;
+            bin.Entries.Add(entry);
+        }
+        else
+        {
+            _vault.Database!.Vault.DeletedObjects.Add(new DeletedObject(entry.Uuid, System.DateTimeOffset.UtcNow));
+        }
+
+        _vault.MarkDirty();
+        Refresh();
+    }
+
+    [RelayCommand]
+    private void NewGroup()
+    {
+        var parent = SelectedGroup?.Group ?? _vault.Database!.Vault.Root;
+        parent.Groups.Add(new Group { Name = "New group", Times = EntryTimes.CreatedNow(System.DateTimeOffset.UtcNow) });
+        _vault.MarkDirty();
+        Refresh();
+    }
+
+    private Group? OwningGroup(Entry entry) =>
+        _vault.Database!.Vault.Root.AllGroups().FirstOrDefault(g => g.Entries.Contains(entry));
+
+    private void Refresh()
+    {
+        var previouslySelected = SelectedEntry?.Entry;
+        Groups.Clear();
+        foreach (var node in BuildTree())
+        {
+            Groups.Add(node);
+        }
+
+        RefreshEntries();
+        SelectedEntry = Entries.FirstOrDefault(r => ReferenceEquals(r.Entry, previouslySelected)) ?? Entries.FirstOrDefault();
+        NotifyDirtyChanged();
+    }
+
+    private static async System.Threading.Tasks.Task<bool> EditInDialog(EntryEditorViewModel vm)
+    {
+        if (global::Avalonia.Application.Current?.ApplicationLifetime is
+            global::Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime { MainWindow: { } owner })
+        {
+            var window = new Views.EntryEditorWindow { DataContext = vm };
+            return await window.ShowDialog<bool>(owner);
+        }
+
+        return false;
     }
 }
 

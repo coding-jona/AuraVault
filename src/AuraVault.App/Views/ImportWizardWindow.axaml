@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:AuraVault.App.ViewModels"
+        x:Class="AuraVault.App.Views.ImportWizardWindow"
+        x:DataType="vm:ImportWizardViewModel"
+        Width="580" Height="520" Title="Import from CSV"
+        WindowStartupLocation="CenterOwner">
+
+  <DockPanel Margin="20" LastChildFill="True">
+
+    <TextBlock DockPanel.Dock="Top" Classes="h1" Text="Import from CSV export" Margin="0,0,0,14" />
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10" Margin="0,14,0,0">
+      <Button x:Name="CloseButton" Classes="ghost" Content="Close" />
+      <Button Classes="accent" Content="Import selected" Command="{Binding ImportCommand}" IsEnabled="{Binding CanImport}" />
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+
+      <StackPanel Spacing="4">
+        <TextBlock Classes="dim" Text="Folder" />
+        <Grid ColumnDefinitions="*,Auto">
+          <TextBox Text="{Binding FolderPath}" />
+          <Button Grid.Column="1" Classes="ghost" Content="Browse…" Command="{Binding BrowseCommand}" Margin="6,0,0,0" />
+        </Grid>
+      </StackPanel>
+
+      <Grid ColumnDefinitions="*,Auto">
+        <ComboBox ItemsSource="{Binding Strategies}" SelectedIndex="{Binding StrategyIndex}" HorizontalAlignment="Stretch" />
+        <CheckBox Grid.Column="1" Content="Include token/system dump" IsChecked="{Binding IncludeReference}" Margin="10,0,0,0" />
+      </Grid>
+
+      <Border Classes="card" Padding="0">
+        <ItemsControl ItemsSource="{Binding Files}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="vm:ImportFileRow">
+              <Grid ColumnDefinitions="Auto,*,Auto" Margin="12,8">
+                <CheckBox IsChecked="{Binding Include}" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="1" Margin="8,0">
+                  <TextBlock Text="{Binding FileName}" FontWeight="SemiBold" />
+                  <TextBlock Classes="dim" FontSize="11">
+                    <Run Text="{Binding New}" /><Run Text=" new · " /><Run Text="{Binding Duplicate}" /><Run Text=" dup · " /><Run Text="{Binding Skipped}" /><Run Text=" skipped" />
+                  </TextBlock>
+                </StackPanel>
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </Border>
+
+      <TextBlock Classes="dim" Text="{Binding Status}" TextWrapping="Wrap" />
+      <ProgressBar IsIndeterminate="True" IsVisible="{Binding Busy}" Height="3" />
+    </StackPanel>
+  </DockPanel>
+</Window>

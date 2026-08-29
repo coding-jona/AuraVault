@@ -7,6 +7,7 @@
     <Project Path="src/AuraVault.Platform.Windows/AuraVault.Platform.Windows.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/AuraVault.App.Tests/AuraVault.App.Tests.csproj" />
     <Project Path="tests/AuraVault.Core.Tests/AuraVault.Core.Tests.csproj" />
   </Folder>
 </Solution>
