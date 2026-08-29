@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>AuraVault.Core</RootNamespace>
+    <AssemblyName>AuraVault.Core</AssemblyName>
+    <Description>UI-independent core: cryptography, KDBX 4.1 codec, vault model, generator, TOTP, import, search.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" />
+    <PackageReference Include="BouncyCastle.Cryptography" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="AuraVault.Core.Tests" />
+    <InternalsVisibleTo Include="AuraVault.Integration.Tests" />
+  </ItemGroup>
+
+</Project>

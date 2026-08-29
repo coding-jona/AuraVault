@@ -1,0 +1,53 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.{csproj,props,targets,json,xml,axaml,yml,yaml}]
+indent_size = 2
+
+[*.cs]
+# ---- Code style ----
+dotnet_sort_system_directives_first = true
+csharp_using_directive_placement = outside_namespace:warning
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_prefer_braces = true:warning
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+
+# ---- Analyzer severities ----
+# Keep correctness / security / reliability rules as errors (inherited default = warning -> error via TWAE).
+
+# Domain vocabulary follows the KDBX / KeePass spec; the "don't end a type name like a BCL suffix"
+# rules produce noise against terms like VariantDictionary, HmacBlockStream, ProtectedString.
+dotnet_diagnostic.CA1711.severity = none   # identifiers should not have incorrect suffix
+dotnet_diagnostic.CA1720.severity = none   # identifier contains type name (e.g. 'Salt', 'Single')
+dotnet_diagnostic.CA1716.severity = none   # identifiers should not match keywords in other languages
+
+# Crypto layer deliberately exposes byte[] on records/APIs for zero-copy interop with BCL/BouncyCastle.
+dotnet_diagnostic.CA1819.severity = suggestion   # properties should not return arrays
+dotnet_diagnostic.CA1051.severity = suggestion   # do not declare visible instance fields
+
+# Style-only rules that shouldn't fail the build.
+dotnet_diagnostic.IDE0058.severity = none   # expression value never used
+dotnet_diagnostic.IDE0130.severity = none   # namespace does not match folder (Core groups by feature)
+dotnet_diagnostic.CA1002.severity = suggestion   # do not expose generic List<T>
+dotnet_diagnostic.CA1062.severity = suggestion   # validate public arguments (nullable ref types cover most)
+dotnet_diagnostic.CA1032.severity = none   # add standard exception constructors
+dotnet_diagnostic.CA5350.severity = none   # weak crypto (Salsa20/SHA1 required by the KDBX format)
+dotnet_diagnostic.CA5351.severity = none   # broken crypto (KDBX 3.1 compat surface)
+dotnet_diagnostic.CA1307.severity = none   # specify StringComparison for clarity
+dotnet_diagnostic.CA1310.severity = suggestion
+
+[tests/**/*.cs]
+dotnet_diagnostic.CA1707.severity = none   # underscores in test method names
+dotnet_diagnostic.CA2007.severity = none   # ConfigureAwait in tests
+dotnet_diagnostic.CA1861.severity = none   # constant arrays as arguments
