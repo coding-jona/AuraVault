@@ -10,6 +10,18 @@ internal static class Program
     public static int Main(string[] args)
     {
         Log.Logger = Logging.CreateBootstrapLogger();
+
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+        {
+            Log.Fatal(e.ExceptionObject as Exception, "Unhandled exception (AppDomain).");
+            Log.CloseAndFlush();
+        };
+        System.Threading.Tasks.TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            Log.Error(e.Exception, "Unobserved task exception.");
+            e.SetObserved();
+        };
+
         try
         {
             return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
